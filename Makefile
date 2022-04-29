@@ -1,15 +1,18 @@
 # is this a cpp or c project?
 FILETYPE := cpp
 # Generic compiler variable for the project
-COMP := gcc
+COMP := g++
 # Generic flags variable for the project
 FLAGS := -Wall -g
 
 # Set project directory to the parent directory of the Makefile
 PROJDIR := $(realpath $(CURDIR)/)
 SOURCEDIR := $(PROJDIR)/src
-BUILDDIR := $(PROJDIR)/obj
+OBJDIR := $(PROJDIR)/obj
 BINDIR := $(PROJDIR)/bin
+
+# The "main" file (or whatever you call it)
+ENTRYPOINT := main
 
 
 # Name of final executable
@@ -17,7 +20,7 @@ TARGET := calc-cli
 
 
 # Decide if commands should be shown or not
-VERBOSE := TRUE
+VERBOSE := FALSE
 ifeq ($(VERBOSE), TRUE)
 	HIDE := 
 else
@@ -28,18 +31,19 @@ endif
 # Create list of directories
 DIRS := $(patsubst $(SOURCEDIR)/%, %, $(shell find $(SOURCEDIR)/ -type d -print))
 SOURCEDIRS := $(foreach dir, $(DIRS), $(addprefix $(SOURCEDIR)/, $(dir)) )
-OBJDIRS := $(foreach dir, $(DIRS), $(addprefix $(BUILDDIR)/, $(dir)) )
+OBJDIRS := $(foreach dir, $(DIRS), $(addprefix $(OBJDIR)/, $(dir)) )
 
 
 # Add SOURCEDIRS to VPATH so make will look for the source files in the correct place
-VPATH := $(SOURCEDIRS)
+VPATH := $(SOURCEDIR)
+VPATH += $(SOURCEDIRS)
 
 # Get all of the sources
-SOURCES := $(foreach dir, $(SOURCEDIRS), $(wildcard $(dir)/*.$(FILETYPE)))
+SOURCES := $(foreach dir, $(VPATH), $(wildcard $(dir)/*.$(FILETYPE)))
 # Define the objects
-OBJECTS := $(subst $(SOURCEDIR), $(BUILDIR), $(SOURCES:.$(FILETYPE)=.o))
+OBJECTS := $(subst $(SOURCEDIR), $(OBJDIR), $(SOURCES:.$(FILETYPE)=.o))
 # Define dependencies for all objects
-DEPS := $(OBJS:.o=.d)
+DEPS := $(OBJECTS:.o=.d)
 
 # Generate all of the includes for GCC by adding -I before each source folder
 INCLUDES := $(foreach dir, $(SOURCEDIRS), $(addprefix -I, $(dir)) )
@@ -66,39 +70,40 @@ PSEP := $(strip $(SEP))
 
 # Function that generates the rule to compile each file from source --> obj + dep
 define generateRules
-$(1)/%.o: %.$(FILETYPE)
-	@echo Building $$@
-	$(HIDE)$(COMP) -c $$(INCLUDES) -o $$(subst /, $$(PSEP), $$@) $$(subst /,$$(PSEP),$$<) -MMD
+$(1)/%.o: $(1)/%.$(FILETYPE) 
+	@echo Building $$@ 
+	$(HIDE)$(COMP) -c $$(INCLUDES) -o $$(subst /, $$(PSEP), $$@) $$(subst /,$$(PSEP),$$<) -MMD 
 endef
 
 .PHONY: all clean directories run
 
 all: directories $(TARGET)
-	@echo Sources = $(SOURCES)
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJECTS)
 	$(HIDE)echo Linking $@
-	$(HIDE)$(COMP) $(FLAGS) $(OBJS) -o $(BINDIR)/$(TARGET)
-
+	$(HIDE)$(COMP) $(FLAGS) $(OBJECTS) -o $(BINDIR)/$(TARGET)
 
 # Generate the rules & evaluate them (aka turn them into executable Makefile rules)
-$(foreach targetdir, $(OBJDIRS), $(eval $(call generateRules, $(targetdir))))
+$(foreach source, $(OBJDIRS), $(eval $(call generateRules, $(source))))
+
+# super hacky bc I'm tired. I would much prefer if I could automate it
+$(OBJDIR)/$(ENTRYPOINT).o: $(SOURCEDIR)/$(ENTRYPOINT).$(FILETYPE)
+	$(HIDE)$(COMP) -c $(subst /,$(PSEP),$<) -o $(subst /,$(PSEP),$@) -MMD
 
 
 # Makes the directories for the OBJDIR
 directories:
-	ifneq ($(strip $(OBJDIRS)),)
-		$(HIDE)$(MKDIR) $(subst /,$(PSEP),$(OBJDIRS)) $(ERRIGNORE)
-	endif
-
+# make sure BINDIR and OBJDIR exist
+	$(HIDE)./directories.sh $(OBJDIR) $(BINDIR) $(OBJDIRS)
 
 # Remove all objects, dependencies, & executable files generated during the build
 clean:
-	@$(RMDIR) $(subst /,$(PSEP),$(OBJDIRS)) $(ERRIGNORE)
-	@$(RM) $(BINDIR)/$(TARGET) $(ERRIGNORE)
+	@$(RMDIR) $(subst /,$(PSEP),$(OBJDIR)) $(ERRIGNORE)
+	@$(RM) $(BINDIR)$(PSEP)$(TARGET) $(ERRIGNORE)
+	@$(RMDIR) $(subst /,$(PSEP),$(BINDIR)) $(ERRIGNORE)
 	@echo Cleaning done!
 
 
 # Run the binary file
 run:
-	$(BINDIR)/./$(TARGET)
+	$(HIDE)$(BINDIR)/./$(TARGET)
