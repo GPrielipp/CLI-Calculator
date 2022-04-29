@@ -16,6 +16,7 @@ class ComponentNode
 {
 private:
 public:
+    ComponentNode();
     virtual NodeTypes item() = 0;
     virtual ComponentNode* left() = 0;
     virtual ComponentNode* right() = 0;
