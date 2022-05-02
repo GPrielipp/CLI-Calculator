@@ -15,8 +15,13 @@ enum NodeTypes
 class ComponentNode 
 {
 private:
+protected:
+    ComponentNode* leftNode;
+    ComponentNode* rightNode;
+    NodeTypes type;
 public:
     ComponentNode();
+    ComponentNode(ComponentNode* leftChild, ComponentNode* rightChild, NodeTypes type);
     virtual NodeTypes item() = 0;
     virtual ComponentNode* left() = 0;
     virtual ComponentNode* right() = 0;
