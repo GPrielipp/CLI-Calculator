@@ -6,6 +6,7 @@
 
 enum NodeTypes
 {
+    COMPONENT=-1,
     LEAF,
     INTERIOR,
     UNARY,
@@ -22,9 +23,9 @@ protected:
 public:
     ComponentNode();
     ComponentNode(ComponentNode* leftChild, ComponentNode* rightChild, NodeTypes type);
-    virtual NodeTypes item() = 0;
-    virtual ComponentNode* left() = 0;
-    virtual ComponentNode* right() = 0;
+    NodeTypes item();
+    ComponentNode* left();
+    ComponentNode* right();
     virtual void accept(Visitor &visitor) = 0;
 };
 
