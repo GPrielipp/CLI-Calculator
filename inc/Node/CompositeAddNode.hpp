@@ -6,8 +6,6 @@
 class CompositeAddNode : public ComponentNode
 {
 private:
-    ComponentNode* leftChild;
-    ComponentNode* rightChild;
 public:
     CompositeAddNode(ComponentNode* left, ComponentNode* right);
     ~CompositeAddNode();
