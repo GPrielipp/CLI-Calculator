@@ -6,8 +6,6 @@
 class CompositeMultiplyNode : public ComponentNode
 {
 private:
-    ComponentNode* leftChild;
-    ComponentNode* rightChild;
 public:
     CompositeMultiplyNode(ComponentNode* left, ComponentNode* right);
     ~CompositeMultiplyNode();
