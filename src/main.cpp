@@ -1,6 +1,14 @@
 #include <iostream>
 #include <memory>
-#include "../inc/Node/ComponentNode.hpp"
+#include <string>
+#include "../inc/nodes.hpp"
+
+std::unique_ptr<ComponentNode*> make_expr_tree(std::string)
+{
+	ComponentNode* nodes[] = {
+
+	};
+}
 
 int main(int argc, char* argv[]) {
 	/* SAMPLE PROBLEM FOR THIS CODE
