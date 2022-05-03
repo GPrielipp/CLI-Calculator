@@ -1,7 +1,7 @@
 #ifndef COMPOSITE_ADD_NODE_HPP
 #define COMPOSITE_ADD_NODE_HPP
 
-#include "./ComponentNode.hpp"
+#include "ComponentNode.hpp"
 
 class CompositeAddNode : public ComponentNode
 {

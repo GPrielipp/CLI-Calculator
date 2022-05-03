@@ -1,7 +1,7 @@
 #ifndef LEAF_NODE_HPP
 #define LEAF_NODE_HPP
 
-#include "./ComponentNode.hpp"
+#include "ComponentNode.hpp"
 
 template <typename T>
 class LeafNode : public ComponentNode

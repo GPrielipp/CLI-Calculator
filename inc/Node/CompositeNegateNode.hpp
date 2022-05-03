@@ -1,7 +1,7 @@
 #ifndef COMPOSITE_NEGATE_NODE_HPP
 #define COMPOSITE_NEGATE_NODE_HPP
 
-#include "./ComponentNode.hpp"
+#include "ComponentNode.hpp"
 
 class CompositeNegateNode : public ComponentNode
 {
