@@ -70,7 +70,7 @@ PSEP := $(strip $(SEP))
 
 # Function that generates the rule to compile each file from source --> obj + dep
 define generateRules
-$(1)/%.o: $(1)/%.$(FILETYPE) 
+$(1)/%.o: $(2)/%.$(FILETYPE) 
 	@echo Building $$@ 
 	$(HIDE)$(COMP) -c $$(INCLUDES) -o $$(subst /, $$(PSEP), $$@) $$(subst /,$$(PSEP),$$<) -MMD 
 endef
@@ -84,7 +84,8 @@ $(TARGET): $(OBJECTS)
 	$(HIDE)$(COMP) $(FLAGS) $(OBJECTS) -o $(BINDIR)/$(TARGET)
 
 # Generate the rules & evaluate them (aka turn them into executable Makefile rules)
-$(foreach source, $(OBJDIRS), $(eval $(call generateRules, $(source))))
+#$(foreach source, $(./pairlist.py [$(OBJDIRS)] [$(SOURCEDIRS)]), $(eval $(call generateRules, $(source))))
+$(foreach source, $(@./pairlist.py [$(OBJDIRS)] [$(SOURCEDIRS)]), @echo $source)
 
 # super hacky bc I'm tired. I would much prefer if I could automate it
 $(OBJDIR)/$(ENTRYPOINT).o: $(SOURCEDIR)/$(ENTRYPOINT).$(FILETYPE)
