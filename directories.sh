@@ -10,16 +10,13 @@ if [ $# -lt 2 ]; then
 fi
 
 if ! [ -d $OBJDIR ]; then
-    echo "OBJDIR"
     mkdir -p $OBJDIR &2>/dev/null
 fi
 
 if ! [ -d $BINDIR ]; then
-    echo "BINDIR"
     mkdir -p $BINDIR &2>/dev/null
 fi
 
 if ! [ -z "$OBJDIRS" ]; then
-    echo "OBJDIRS"
     mkdir -p $OBJDIRS &2>/dev/null
 fi
