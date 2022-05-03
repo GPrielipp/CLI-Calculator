@@ -1,4 +1,4 @@
-compile = ["make", "-s"]
+compile = ["make"]
 run = "make run"
 hidden = ["**/*.o", "**/*.d", ".ccls-cache", "Makefile"]
 
