@@ -8,6 +8,7 @@ std::unique_ptr<ComponentNode*> make_expr_tree(std::string)
 	ComponentNode* nodes[] = {
 
 	};
+	return nullptr;
 }
 
 int main(int argc, char* argv[]) {
