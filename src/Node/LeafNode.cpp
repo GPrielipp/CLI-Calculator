@@ -1,5 +1,9 @@
 #include "../../inc/Node/LeafNode.hpp"
 
+// trying to fix undefined reference
+template class LeafNode<int>;
+
+
 template <typename T>
 LeafNode<T>::LeafNode(T contents)
 : ComponentNode(NO_NODE, NO_NODE, LEAF)

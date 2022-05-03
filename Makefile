@@ -20,7 +20,7 @@ TARGET := calc-cli
 
 
 # Decide if commands should be shown or not
-VERBOSE := FALSE
+VERBOSE := TRUE
 ifeq ($(VERBOSE), TRUE)
 	HIDE := 
 else
@@ -46,8 +46,9 @@ OBJECTS := $(subst $(SOURCEDIR), $(OBJDIR), $(SOURCES:.$(FILETYPE)=.o))
 DEPS := $(OBJECTS:.o=.d)
 
 # Generate all of the includes for GCC by adding -I before each source folder
-INCLUDES := $(foreach dir, $(SOURCEDIRS), $(addprefix -I, $(dir)) )
-
+#INCLUDES := $(foreach dir, $(SOURCEDIRS), $(addprefix -I, $(dir)) )
+INCLUDEDIRS := $(shell find $(PROJDIR)/inc/* -type d -print)
+INCLUDES := $(foreach dir, $(INCLUDEDIRS), $(addprefix -I, $(dir)))
 
 # OS specific (ensures compatability across platforms)
 ifeq ($(OS),Windows_NT)
@@ -73,6 +74,7 @@ define generateRules
 $(1)/%.o: $(2)/%.$(FILETYPE) 
 	@echo Building $$@
 	$(HIDE)$(COMP) -c $$(INCLUDES) -o $$(subst /,$$(PSEP),$$@) $$(subst /,$$(PSEP),$$<) -MMD 
+	@echo
 endef
 
 .PHONY: all clean directories run
@@ -81,6 +83,7 @@ all: directories $(TARGET)
 
 test:
 	@echo $(DIRS)
+	@echo $(INCLUDES)
 	@echo $(OBJDIR)
 	@echo $(SOURCEDIR)
 
@@ -94,7 +97,7 @@ $(foreach targetdir, $(DIRS), $(eval $(call generateRules, $(OBJDIR)/$(targetdir
 
 # super hacky bc I'm tired. I would much prefer if I could automate it
 $(OBJDIR)/$(ENTRYPOINT).o: $(SOURCEDIR)/$(ENTRYPOINT).$(FILETYPE)
-	$(HIDE)$(COMP) -c $(subst /,$(PSEP),$<) -o $(subst /,$(PSEP),$@) -MMD
+	$(HIDE)$(COMP) $(INCLUDES) -c $(subst /,$(PSEP),$<) -o $(subst /,$(PSEP),$@) -MMD
 
 
 # Makes the directories for the OBJDIR
