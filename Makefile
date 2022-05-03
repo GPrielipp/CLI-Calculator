@@ -81,18 +81,12 @@ endef
 
 all: directories $(TARGET)
 
-test:
-	@echo $(DIRS)
-	@echo $(INCLUDES)
-	@echo $(OBJDIR)
-	@echo $(SOURCEDIR)
 
 $(TARGET): $(OBJECTS)
 	$(HIDE)echo Linking $@
 	$(HIDE)$(COMP) $(FLAGS) $(OBJECTS) -o $(BINDIR)/$(TARGET)
 
 # Generate the rules & evaluate them (aka turn them into executable Makefile rules)
-#$(foreach source, $(./pairlist.py [$(OBJDIRS)] [$(SOURCEDIRS)]), $(eval $(call generateRules, $(source))))
 $(foreach targetdir, $(DIRS), $(eval $(call generateRules, $(OBJDIR)/$(targetdir), $(SOURCEDIR)/$(targetdir))))
 
 # super hacky bc I'm tired. I would much prefer if I could automate it

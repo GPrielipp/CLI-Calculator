@@ -12,6 +12,7 @@ public:
     LeafNode(T contents);
     ~LeafNode();
     NodeTypes item();       // return NodeTypes::LEAF
+    T value();               // return this->value
     ComponentNode* left();  // return NO_NODE
     ComponentNode* right(); // return NO_NODE
     void accept(Visitor &visitor);

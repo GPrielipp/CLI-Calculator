@@ -12,6 +12,12 @@ LeafNode<T>::LeafNode(T contents)
 }
 
 template <typename T>
+T LeafNode<T>::value()
+{
+    return this->value;
+}
+
+template <typename T>
 void LeafNode<T>::accept(Visitor& visitor)
 {
     // ahhhh
