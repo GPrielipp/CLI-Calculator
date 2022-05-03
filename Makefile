@@ -1,3 +1,6 @@
+# I much prefer to use bash (:
+SHELL:=/bin/bash
+
 # is this a cpp or c project?
 FILETYPE := cpp
 # Generic compiler variable for the project

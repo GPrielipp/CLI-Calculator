@@ -7,7 +7,7 @@ template <typename T>
 class LeafNode : public ComponentNode
 {
 private:
-    T value;
+    T mvalue;
 public:
     LeafNode(T contents);
     ~LeafNode();

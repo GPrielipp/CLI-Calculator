@@ -10,15 +10,6 @@ class ExpressionTree
 protected:
     ComponentNode* root;
 public:
-    ExpressionTree(ComponentNode* root);
-    bool is_null();
-    int item();
-    ExpressionTree left();
-    ExpressionTree right();
-    void accept(Visitor& visitor);
-    iterator begin(const std::string& traversal_order);
-    iterator end(const std::string& traversal_order);
-
     struct iterator
     {
         using iterator_category = std::forward_iterator_tag;
@@ -27,6 +18,15 @@ public:
         using pointer           = ComponentNode*;
         using reference         = ComponentNode&;
     };
+
+    ExpressionTree(ComponentNode* root);
+    virtual bool is_null();
+    virtual int item();
+    virtual ExpressionTree left();
+    virtual ExpressionTree right();
+    virtual void accept(Visitor& visitor);
+    iterator begin(const std::string& traversal_order);
+    iterator end(const std::string& traversal_order);
 };
 
 

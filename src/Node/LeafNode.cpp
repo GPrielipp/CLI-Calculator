@@ -8,13 +8,13 @@ template <typename T>
 LeafNode<T>::LeafNode(T contents)
 : ComponentNode(NO_NODE, NO_NODE, LEAF)
 {
-    this->value = contents;
+    this->mvalue = contents;
 }
 
 template <typename T>
 T LeafNode<T>::value()
 {
-    return this->value;
+    return this->mvalue;
 }
 
 template <typename T>
